@@ -12,7 +12,7 @@ function App() {
     setLoading(true);
     try {
       // 1. Check if the key even exists in the browser
-      const apiKey = import.meta.env.VITE_GEMINI_KEY;
+      const apiKey = import.meta.env.VITE_APP_DATA;
 
       if (!apiKey) {
         setOutput(
