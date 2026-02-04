@@ -7,12 +7,22 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [tone, setTone] = useState("professional");
   const [copied, setCopied] = useState(false);
-
   const handleMagic = async () => {
     if (!input) return;
     setLoading(true);
     try {
-      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_KEY);
+      // 1. Check if the key even exists in the browser
+      const apiKey = import.meta.env.VITE_GEMINI_KEY;
+
+      if (!apiKey) {
+        setOutput(
+          "DEBUG: The website can't see your API Key. Netlify didn't 'bake' it in.",
+        );
+        setLoading(false);
+        return;
+      }
+
+      const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       const prompt = `Act as an expert editor. Rewrite the following text to be more engaging and clear in a ${tone} tone: ${input}`;
@@ -20,11 +30,12 @@ function App() {
       const result = await model.generateContent(prompt);
       setOutput(result.response.text());
     } catch (error) {
-      setOutput("Check your API key in the .env file!");
+      // 2. Show the ACTUAL error from Google
+      console.error(error);
+      setOutput(`ERROR: ${error.message}`);
     }
     setLoading(false);
   };
-
   const copyToClipboard = () => {
     navigator.clipboard.writeText(output);
     setCopied(true);
