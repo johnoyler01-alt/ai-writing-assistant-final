@@ -23,7 +23,7 @@ function App() {
       }
 
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
       const prompt = `Act as an expert editor. Rewrite the following text to be more engaging and clear in a ${tone} tone: ${input}`;
 
